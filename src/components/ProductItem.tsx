@@ -18,9 +18,9 @@ const ProductItem = ({
           <p className="text-gray-400 text-xs mb-2">{category}</p>
           <p className="text-lg font-bold mb-3">{name}</p>
         </div>
-        <button className="flex justify-between w-full bg-gray-100 rounded-lg  text-sm cursor-pointer">
-          <div className="py-2 px-4">
-            <i className="mr-2 fa-solid fa-cart-shopping"></i>
+        <button className="flex justify-between w-full bg-gray-100 rounded-lg text-md button-hover">
+          <div className="py-3 px-4 flex items-center">
+            <i className="mr-2 fa-solid fa-cart-shopping text-xl"></i>
             Add to cart
           </div>
           <span className="flex items-center bg-cyan-300 rounded-r-lg px-4 font-semibold text-lg">

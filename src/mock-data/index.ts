@@ -86,3 +86,30 @@ export const MockProducts = [
     image: img5,
   },
 ];
+
+export const Categories = [
+  {
+    id: 1,
+    name: "Laptops",
+  },
+  {
+    id: 2,
+    name: "Smartphones",
+  },
+  {
+    id: 3,
+    name: "Tablets",
+  },
+  {
+    id: 4,
+    name: "Headphones",
+  },
+  {
+    id: 5,
+    name: "Monitors",
+  },
+  {
+    id: 6,
+    name: "Accessories",
+  },
+];
