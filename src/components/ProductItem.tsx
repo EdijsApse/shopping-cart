@@ -1,6 +1,7 @@
 import { addItem } from "../store/cartSlice";
 import { useAppDispatch } from "../store/store";
 import type { Product } from "../types/product";
+import Button from "./Button";
 
 const ProductItem = (product: Product) => {
   const appDispatch = useAppDispatch();
@@ -22,18 +23,20 @@ const ProductItem = (product: Product) => {
           <p className="text-gray-400 text-xs mb-2">{product.category}</p>
           <p className="text-lg font-bold mb-3">{product.name}</p>
         </div>
-        <button
-          className="flex justify-between w-full bg-gray-100 rounded-lg text-md button-hover"
+        <Button
+          className="w-full py-0! px-0! justify-between"
           onClick={onAddHandler}
         >
-          <div className="py-3 px-4 flex items-center">
-            <i className="mr-2 fa-solid fa-cart-shopping text-xl"></i>
-            Add to cart
-          </div>
-          <span className="flex items-center bg-cyan-300 rounded-r-lg px-4 font-semibold text-lg">
-            {product.price}$
-          </span>
-        </button>
+          <>
+            <div className="py-3 px-4 flex items-center">
+              <i className="mr-2 fa-solid fa-cart-shopping text-xl"></i>
+              Add to cart
+            </div>
+            <span className="h-full flex items-center bg-cyan-300 rounded-r-lg px-4 font-semibold text-lg">
+              {product.price}$
+            </span>
+          </>
+        </Button>
       </div>
     </div>
   );

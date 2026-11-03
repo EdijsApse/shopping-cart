@@ -2,7 +2,7 @@ const year = new Date().getFullYear();
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-100 py-4 mt-10">
+    <footer className="bg-gray-100 py-4">
       <div className="container">
         <p className="text-center">
           &copy; {year} TechStore. All rights reserved.
