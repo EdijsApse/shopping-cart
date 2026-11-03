@@ -1,12 +1,16 @@
 import { Categories } from "../mock-data";
+import { useAppSelector } from "../store/store";
 
 const Header = () => {
+  const cartItems = useAppSelector((state) => state.cart.items);
+
   return (
     <header>
       <div className="bg-gray-100 py-4">
         <div className="container flex justify-end">
           <button className="flex items-center py-3 px-4 bg-white rounded-lg text-md cursor-pointer button-hover">
-            <i className="mr-2 fa-solid fa-cart-shopping text-xl"></i>0
+            <i className="mr-2 fa-solid fa-cart-shopping text-xl"></i>
+            {cartItems.length}
           </button>
         </div>
       </div>
