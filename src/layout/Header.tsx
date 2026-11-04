@@ -5,7 +5,7 @@ const Header = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
 
   return (
-    <header>
+    <header className="sticky top-0">
       <div className="bg-gray-100 py-4">
         <div className="container flex justify-between items-center">
           <nav>

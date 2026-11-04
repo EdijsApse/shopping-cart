@@ -3,32 +3,141 @@ import { useAppDispatch } from "../store/store";
 import { MockProducts, Categories } from "../mock-data";
 import { useEffect } from "react";
 import { loadItems } from "../store/productsSlice";
+import { useSearchParams } from "react-router";
+import Button from "../components/Button";
+import DrodpownSelect from "../components/DropdownSelect";
+
+type ProductsSearchParams = {
+  categories: number[];
+  keyword: string;
+};
+
+const getCategoriesArray = (categoryString: string): number[] => {
+  try {
+    return JSON.parse(categoryString)
+      .map((cat: string) => +cat)
+      .filter((cat: number) => {
+        return !Number.isNaN(cat);
+      });
+  } catch {
+    return [];
+  }
+};
+
+const categoryDropdownItems = Categories.map((cat) => ({
+  value: cat.id,
+  display: cat.name,
+}));
 
 const Products = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") ?? "";
+  const selectedCategories = getCategoriesArray(
+    searchParams.get("categories") ?? "",
+  );
   const appDispatch = useAppDispatch();
+  const updateSearchParams = (newParams: ProductsSearchParams) => {
+    const { categories, keyword } = newParams;
+    setSearchParams({
+      keyword,
+      categories: JSON.stringify(categories),
+    });
+  };
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateSearchParams({
+      keyword: event.target.value,
+      categories: selectedCategories,
+    });
+  };
+  const onSelectCategory = (value: number) => {
+    const newValues = [...selectedCategories];
+    const categoryIndex = newValues.findIndex((val) => val === value);
+
+    if (categoryIndex === -1) {
+      newValues.push(value);
+    } else {
+      newValues.splice(categoryIndex, 1);
+    }
+
+    updateSearchParams({
+      keyword,
+      categories: newValues,
+    });
+  };
 
   useEffect(() => {
+    let filteredProducts = [...MockProducts];
+
+    if (keyword.length || selectedCategories.length) {
+      filteredProducts = filteredProducts.filter((product) => {
+        let matchedCategory = true;
+        let matchedKeyword = true;
+
+        if (selectedCategories.length) {
+          const productCategory = Categories.find(
+            (cat) => cat.name === product.category,
+          );
+          matchedCategory = productCategory
+            ? selectedCategories.includes(productCategory.id)
+            : false;
+        }
+
+        if (keyword.length) {
+          matchedKeyword = product.name
+            .toLocaleLowerCase()
+            .includes(keyword.toLocaleLowerCase());
+        }
+
+        return matchedCategory && matchedKeyword;
+      });
+    }
+
     appDispatch(
       loadItems({
-        items: MockProducts,
+        items: filteredProducts,
       }),
     );
-  }, []);
+  }, [keyword, selectedCategories]);
 
   return (
-    <div>
-      <div className="flex flex-wrap gap-4 mb-10">
-        {Categories.map((cat) => (
-          <span
-            key={cat.id}
-            className="bg-gray-100 py-2 px-4 rounded button-hover hover:text-cyan-400"
+    <section>
+      <div className="flex space-x-4 mb-10">
+        <div className="grid grid-cols-2 gap-x-4">
+          <input
+            type="text"
+            name="keyword"
+            min={0}
+            value={keyword}
+            onChange={onInputChange}
+            className="h-12 py-2 px-4 border border-gray-200 rounded"
+            aria-label={`Search keyword`}
+          />
+
+          <DrodpownSelect
+            items={categoryDropdownItems}
+            selectedValues={selectedCategories}
+            onSelect={onSelectCategory}
+          />
+        </div>
+
+        {keyword || selectedCategories.length ? (
+          <Button
+            style="Danger"
+            onClick={() => {
+              setSearchParams({});
+            }}
           >
-            {cat.name}
-          </span>
-        ))}
+            <>
+              <i className="fa-solid fa-close"></i>
+              <span>Clear</span>
+            </>
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
       <ProductsList />
-    </div>
+    </section>
   );
 };
 
