@@ -48,39 +48,53 @@ const CartItemComponent = (cartItem: CartItem) => {
   return (
     <div
       key={cartItem.id}
-      className="flex space-x-4 border-b border-gray-100 pb-6"
+      className="flex flex-col gap-4 border-b border-gray-100 pb-6 lg:flex-row"
     >
-      <div className="max-w-80 w-full rounded overflow-hidden">
+      <div className="w-full rounded overflow-hidden lg:max-w-80">
         <img src={cartItem.image} alt={cartItem.name} />
       </div>
       <div className="flex flex-col">
         <p className="text-cyan-400 text-xs">{cartItem.manufacturer}</p>
         <p className="text-gray-400 text-xs mb-2">{cartItem.category}</p>
         <p className="text-lg font-bold">{cartItem.name}</p>
-        <p className="text-lg font-bold mb-3">{cartItem.price}$</p>
-        <div className="flex space-x-4 mt-auto">
+        <p className="text-lg font-bold mb-3">
+          <span className="text-lg font-normal">Price:</span> {cartItem.price}$
+        </p>
+        <div className="flex flex-col gap-4 mt-auto md:flex-row">
           <input
             type="number"
             min={0}
             value={cartItem.quantity}
             onChange={onInputChange}
-            className="w-20 py-2 px-4 border border-gray-200 rounded"
+            className="w-full py-2 px-4 border border-gray-200 rounded md:w-20"
             aria-label={`Quantity of ${cartItem.name} item`}
           />
-          <Button onClick={onIncreaseHandler}>
-            <i className="fa-solid fa-plus"></i>
-          </Button>
+          <div className="w-full flex flex-col gap-4 md:flex-row md:w-auto">
+            <Button
+              onClick={onIncreaseHandler}
+              className="w-full justify-center md:auto"
+            >
+              <i className="fa-solid fa-plus"></i>
+            </Button>
 
-          <Button onClick={onDecreaseHandler}>
-            <i className="fa-solid fa-minus"></i>
-          </Button>
+            <Button
+              onClick={onDecreaseHandler}
+              className="w-full justify-center md:auto"
+            >
+              <i className="fa-solid fa-minus"></i>
+            </Button>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col justify-between ml-auto">
-        <p className="text-2xl font-bold text-right">
-          ${cartItem.price * cartItem.quantity}
+      <div className="flex flex-col-reverse items-start mt-2 md:mt-0 md:items-center md:flex-row-reverse md:justify-between lg:ml-auto lg:flex-col lg:items-end">
+        <p className="mt-4 text-2xl font-bold text-right md:mt-0">
+          Total: ${cartItem.price * cartItem.quantity}
         </p>
-        <Button style="Danger" onClick={onRemovehandler}>
+        <Button
+          className="justify-center w-full md:w-auto md:justify-start"
+          style="Danger"
+          onClick={onRemovehandler}
+        >
           <>
             <i className="fa-solid fa-trash"></i>
             <span>Remove from cart</span>

@@ -101,11 +101,12 @@ const Products = () => {
 
   return (
     <section>
-      <div className="flex space-x-4 mb-10">
-        <div className="grid grid-cols-2 gap-x-4">
+      <div className="flex flex-col gap-4 md:flex-row mb-10">
+        <div className="w-full grid gap-4 md:grid-cols-2 md:gap-x-4 xl:max-w-1/2">
           <input
             type="text"
             name="keyword"
+            placeholder="What are you looking for?"
             min={0}
             value={keyword}
             onChange={onInputChange}
@@ -122,6 +123,7 @@ const Products = () => {
 
         {keyword || selectedCategories.length ? (
           <Button
+            className="justify-center md:justify-start"
             style="Danger"
             onClick={() => {
               setSearchParams({});

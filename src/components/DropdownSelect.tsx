@@ -49,7 +49,11 @@ const DrodpownSelect = ({
         className="flex items-center h-12 py-2 px-4 border bg-white border-gray-200 rounded cursor-pointer"
         onClick={toggleVisibility}
       >
-        <span>Select option</span>
+        <span>
+          {selectedValues.length
+            ? `${selectedValues.length} selected`
+            : "Select option"}
+        </span>
         <button
           className="ml-auto cursor-pointer"
           type="button"

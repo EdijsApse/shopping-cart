@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { addItem } from "../store/cartSlice";
 import { useAppDispatch } from "../store/store";
 import type { Product } from "../types/product";
@@ -21,7 +22,12 @@ const ProductItem = (product: Product) => {
         <div className="my-4">
           <p className="text-cyan-400 text-xs">{product.manufacturer}</p>
           <p className="text-gray-400 text-xs mb-2">{product.category}</p>
-          <p className="text-lg font-bold mb-3">{product.name}</p>
+          <Link
+            to={`/products/${product.id}`}
+            className="text-lg font-bold mb-3 cursor-pointer hover:text-cyan-400 transition-all duration-300"
+          >
+            {product.name}
+          </Link>
         </div>
         <Button
           className="w-full py-0! px-0! justify-between"
