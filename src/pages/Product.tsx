@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from "react-router";
 import { MockProducts, ProductReviews } from "../mock-data/index";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getItem } from "../store/productsSlice";
 import Button from "../components/Button";
 import { addItem } from "../store/cartSlice";
+import ReviewForm from "../layout/ReviewForm";
 
 const Product = () => {
-  const [selectedRating, setSelectedRating] = useState(1);
   const { productId } = useParams();
   const product = useAppSelector((state) => state.products.product);
   const appDispatch = useAppDispatch();
@@ -20,10 +20,6 @@ const Product = () => {
         }),
       );
     }
-  };
-  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("Submited");
   };
 
   useEffect(() => {
@@ -99,54 +95,8 @@ const Product = () => {
               </div>
             ))}
           </div>
-          <form onSubmit={handleSubmit}>
-            <h2 className="text-3xl font-semibold mb-10">Review product</h2>
-            <div className="w-full space-y-6 lg:max-w-xl">
-              <div className="flex flex-col">
-                <label htmlFor="fullname" className="mb-2 font-semibold">
-                  Fullname
-                </label>
-                <input
-                  id="fullname"
-                  name="fullname"
-                  className="form-input rounded-lg"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="description" className="mb-2 font-semibold">
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  name="fullname"
-                  className="form-input resize-none min-h-32"
-                ></textarea>
-              </div>
-              <div className="flex gap-4 mt-auto">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className="cursor-pointer"
-                    aria-label={`Give ${index + 1} rating for this product`}
-                    onClick={() => {
-                      setSelectedRating(index + 1);
-                    }}
-                  >
-                    <i
-                      className={`text-4xl text-amber-300 fa-star ${index + 1 <= selectedRating ? "fa-solid" : "fa-regular"}`}
-                    ></i>
-                  </button>
-                ))}
-              </div>
-              <Button
-                className="w-full justify-center md:w-auto md:justify-start"
-                type="submit"
-              >
-                Submit
-              </Button>
-            </div>
-          </form>
+
+          <ReviewForm />
         </>
       )}
     </section>
