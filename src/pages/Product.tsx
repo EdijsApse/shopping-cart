@@ -1,15 +1,18 @@
 import { useNavigate, useParams } from "react-router";
-import { MockProducts, ProductReviews } from "../mock-data/index";
+import { ProductReviews } from "../mock-data/index";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect } from "react";
-import { getItem } from "../store/productsSlice";
 import Button from "../components/Button";
 import { addItem } from "../store/cartSlice";
 import ReviewForm from "../layout/ReviewForm";
+import { getItem } from "../store/products/thunks";
+import Spinner from "../components/Spinner";
 
 const Product = () => {
+  const { isLoadingDetails, product } = useAppSelector(
+    (state) => state.products,
+  );
   const { productId } = useParams();
-  const product = useAppSelector((state) => state.products.product);
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
   const onAddHandler = () => {
@@ -23,18 +26,17 @@ const Product = () => {
   };
 
   useEffect(() => {
-    const product = MockProducts.find((p) => `${p.id}` === productId);
-
-    if (product) {
-      appDispatch(getItem({ product }));
-    } else {
-      navigate("/404");
-    }
+    appDispatch(getItem(productId));
   }, [productId]);
 
+  if (!isLoadingDetails && !product) {
+    return navigate("/404");
+  }
+
   return (
-    <section>
-      {product && (
+    <section className="relative">
+      {isLoadingDetails && <Spinner />}
+      {product && !isLoadingDetails && (
         <>
           <div className="grid lg:grid-cols-[40%_60%] xl:grid-cols-[30%_70%] gap-8">
             <div className="rounded overflow-hidden">
@@ -96,7 +98,7 @@ const Product = () => {
             ))}
           </div>
 
-          <ReviewForm />
+          {productId ? <ReviewForm productId={productId} /> : ""}
         </>
       )}
     </section>

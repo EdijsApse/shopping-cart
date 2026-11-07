@@ -8,6 +8,7 @@ export type Product = {
   description?: string;
 };
 
-export type CartItem = Product & {
-  quantity: number;
+export type ProductsSearchParams = {
+  categories: number[];
+  keyword: string;
 };

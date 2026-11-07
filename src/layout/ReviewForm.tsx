@@ -1,20 +1,19 @@
 import Button from "../components/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useState } from "react";
+import { reviewSchema } from "../zod-schemas/product-review";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import Spinner from "../components/Spinner";
+import { reviewProduct } from "../store/products/thunks";
 
-const reviewSchema = z.object({
-  fullname: z.string().min(3, { error: "Fullname is required" }),
-  description: z.string().optional(),
-  rating: z
-    .number()
-    .min(1, { error: "Rating should be atleast 1." })
-    .max(5, { error: "Rating can't be higher than 5" }),
-});
+type ReviewFormProps = {
+  productId: string;
+};
 
-const ReviewForm = () => {
-  const [isSubmited, setIsSubmited] = useState(false);
+const ReviewForm = ({ productId }: ReviewFormProps) => {
+  const appDispatch = useAppDispatch();
+  const { reviewError, reviewStored, savingReview, reviewSubmited } =
+    useAppSelector((state) => state.products);
   const {
     register,
     handleSubmit,
@@ -31,17 +30,29 @@ const ReviewForm = () => {
   });
 
   const onSubmitHandler = handleSubmit((values) => {
-    console.log(values);
-    setIsSubmited(true);
+    appDispatch(
+      reviewProduct({
+        ...values,
+        id: productId,
+      }),
+    );
   });
 
   return (
-    <>
-      {isSubmited ? (
+    <div className="relative min-h-20">
+      {savingReview && <Spinner />}
+      {!savingReview && !reviewStored && reviewSubmited && (
+        <p className="my-10 text-center text-3xl font-semibold">
+          Your review wasn't saved.
+          {reviewError && <> Reason - {reviewError}</>}
+        </p>
+      )}
+      {reviewSubmited && reviewStored && (
         <p className="my-10 text-center text-3xl font-semibold">
           Thank you for your review!
         </p>
-      ) : (
+      )}
+      {!reviewStored && !savingReview && (
         <form onSubmit={onSubmitHandler}>
           <h2 className="text-3xl font-semibold mb-10">Review product</h2>
           <div className="w-full space-y-6 lg:max-w-xl">
@@ -107,7 +118,7 @@ const ReviewForm = () => {
           </div>
         </form>
       )}
-    </>
+    </div>
   );
 };
 

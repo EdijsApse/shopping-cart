@@ -1,28 +1,11 @@
 import ProductsList from "../components/ProductsList";
-import { useAppDispatch } from "../store/store";
-import { MockProducts, Categories } from "../mock-data";
-import { useEffect } from "react";
-import { loadItems } from "../store/productsSlice";
-import { useSearchParams } from "react-router";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { Categories } from "../mock-data";
+import { useEffect, useState } from "react";
+import { loadItems } from "../store/products/thunks";
 import Button from "../components/Button";
 import DrodpownSelect from "../components/DropdownSelect";
-
-type ProductsSearchParams = {
-  categories: number[];
-  keyword: string;
-};
-
-const getCategoriesArray = (categoryString: string): number[] => {
-  try {
-    return JSON.parse(categoryString)
-      .map((cat: string) => +cat)
-      .filter((cat: number) => {
-        return !Number.isNaN(cat);
-      });
-  } catch {
-    return [];
-  }
-};
+import Spinner from "../components/Spinner";
 
 const categoryDropdownItems = Categories.map((cat) => ({
   value: cat.id,
@@ -30,27 +13,18 @@ const categoryDropdownItems = Categories.map((cat) => ({
 }));
 
 const Products = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword") ?? "";
-  const selectedCategories = getCategoriesArray(
-    searchParams.get("categories") ?? "",
+  const [keyword, setKeyword] = useState("");
+  const [categories, setCategories] = useState<number[]>([]);
+  const { isLoadingItems, itemsError, items } = useAppSelector(
+    (state) => state.products,
   );
+
   const appDispatch = useAppDispatch();
-  const updateSearchParams = (newParams: ProductsSearchParams) => {
-    const { categories, keyword } = newParams;
-    setSearchParams({
-      keyword,
-      categories: JSON.stringify(categories),
-    });
-  };
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateSearchParams({
-      keyword: event.target.value,
-      categories: selectedCategories,
-    });
+    setKeyword(event.target.value);
   };
   const onSelectCategory = (value: number) => {
-    const newValues = [...selectedCategories];
+    const newValues = [...categories];
     const categoryIndex = newValues.findIndex((val) => val === value);
 
     if (categoryIndex === -1) {
@@ -59,48 +33,26 @@ const Products = () => {
       newValues.splice(categoryIndex, 1);
     }
 
-    updateSearchParams({
-      keyword,
-      categories: newValues,
-    });
+    setCategories(newValues);
   };
 
   useEffect(() => {
-    let filteredProducts = [...MockProducts];
+    const debounceTimeout = setTimeout(() => {
+      appDispatch(
+        loadItems({
+          keyword,
+          categories,
+        }),
+      );
+    }, 300);
 
-    if (keyword.length || selectedCategories.length) {
-      filteredProducts = filteredProducts.filter((product) => {
-        let matchedCategory = true;
-        let matchedKeyword = true;
-
-        if (selectedCategories.length) {
-          const productCategory = Categories.find(
-            (cat) => cat.name === product.category,
-          );
-          matchedCategory = productCategory
-            ? selectedCategories.includes(productCategory.id)
-            : false;
-        }
-
-        if (keyword.length) {
-          matchedKeyword = product.name
-            .toLocaleLowerCase()
-            .includes(keyword.toLocaleLowerCase());
-        }
-
-        return matchedCategory && matchedKeyword;
-      });
-    }
-
-    appDispatch(
-      loadItems({
-        items: filteredProducts,
-      }),
-    );
-  }, [keyword, selectedCategories]);
+    return () => {
+      clearTimeout(debounceTimeout);
+    };
+  }, [appDispatch, keyword, categories]);
 
   return (
-    <section>
+    <section className="relative">
       <div className="flex flex-col gap-4 md:flex-row mb-10">
         <div className="w-full grid gap-4 md:grid-cols-2 md:gap-x-4 xl:max-w-1/2">
           <input
@@ -116,17 +68,18 @@ const Products = () => {
 
           <DrodpownSelect
             items={categoryDropdownItems}
-            selectedValues={selectedCategories}
+            selectedValues={categories}
             onSelect={onSelectCategory}
           />
         </div>
 
-        {keyword || selectedCategories.length ? (
+        {keyword || categories.length ? (
           <Button
             className="justify-center md:justify-start"
             style="Danger"
             onClick={() => {
-              setSearchParams({});
+              setCategories([]);
+              setKeyword("");
             }}
           >
             <>
@@ -138,7 +91,11 @@ const Products = () => {
           ""
         )}
       </div>
-      <ProductsList />
+      {isLoadingItems && <Spinner />}
+      {!isLoadingItems && items.length !== 0 && <ProductsList items={items} />}
+      {!isLoadingItems && itemsError && (
+        <p className="text-center text-2xl font-semibold">{itemsError}</p>
+      )}
     </section>
   );
 };

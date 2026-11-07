@@ -1,17 +1,19 @@
 import ProductItem from "./ProductItem";
-import { useAppSelector } from "../store/store";
+import type { Product } from "../types/product";
 
-const ProductsList = () => {
-  const products = useAppSelector((state) => state.products.items);
+type ProductsListProps = {
+  items: Product[];
+};
+
+const ProductsList = ({ items }: ProductsListProps) => {
   return (
     <section>
-      <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:gap-x-4 lg:grid-cols-3 xl:grid-cols-4">
-        {products.map((product) => (
-          <ProductItem key={product.id} {...product} />
-        ))}
-      </div>
-      {products.length === 0 && (
-        <p className="text-center text-lg">No products found</p>
+      {items.length && (
+        <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:gap-x-4 lg:grid-cols-3 xl:grid-cols-4">
+          {items.map((product) => (
+            <ProductItem key={product.id} {...product} />
+          ))}
+        </div>
       )}
     </section>
   );
