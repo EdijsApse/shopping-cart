@@ -1,6 +1,6 @@
-import { Link } from "react-router";
 import type { Product } from "../types/product";
 import AddToCartButton from "./AddToCartButton";
+import ProductLink from "./ProductLink";
 
 const ProductItem = (product: Product) => {
   return (
@@ -12,12 +12,9 @@ const ProductItem = (product: Product) => {
         <div className="my-4">
           <p className="text-cyan-400 text-xs">{product.manufacturer}</p>
           <p className="text-gray-400 text-xs mb-2">{product.category}</p>
-          <Link
-            to={`/products/${product.id}`}
-            className="text-lg font-bold mb-3 cursor-pointer hover:text-cyan-400 transition-all duration-300"
-          >
+          <ProductLink productId={product.id} className="mb-3">
             {product.name}
-          </Link>
+          </ProductLink>
         </div>
         <AddToCartButton product={product} />
       </div>

@@ -2,6 +2,7 @@ import type { CartItem } from "../types/cart";
 import { changeQuantity, removeItem } from "../store/cartSlice";
 import { useAppDispatch } from "../store/store";
 import Button from "./Button";
+import ProductLink from "./ProductLink";
 
 const CartItemComponent = (cartItem: CartItem) => {
   const appDispatch = useAppDispatch();
@@ -56,7 +57,7 @@ const CartItemComponent = (cartItem: CartItem) => {
       <div className="flex flex-col">
         <p className="text-cyan-400 text-xs">{cartItem.manufacturer}</p>
         <p className="text-gray-400 text-xs mb-2">{cartItem.category}</p>
-        <p className="text-lg font-bold">{cartItem.name}</p>
+        <ProductLink productId={cartItem.id}>{cartItem.name}</ProductLink>
         <p className="text-lg font-bold mb-3">
           <span className="text-lg font-normal">Price:</span> {cartItem.price}$
         </p>
