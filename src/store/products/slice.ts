@@ -18,7 +18,7 @@ const initialState: ProductsState = {
   items: [],
   product: null,
   isLoadingItems: false,
-  isLoadingDetails: false,
+  isLoadingDetails: true,
   savingReview: false,
   reviewStored: false,
   reviewSubmited: false,

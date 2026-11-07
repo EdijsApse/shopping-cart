@@ -1,7 +1,7 @@
 import ProductsList from "../components/ProductsList";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Categories } from "../mock-data";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { loadItems } from "../store/products/thunks";
 import Button from "../components/Button";
 import DrodpownSelect from "../components/DropdownSelect";
@@ -13,6 +13,7 @@ const categoryDropdownItems = Categories.map((cat) => ({
 }));
 
 const Products = () => {
+  const isMounted = useRef(false);
   const [keyword, setKeyword] = useState("");
   const [categories, setCategories] = useState<number[]>([]);
   const { isLoadingItems, itemsError, items } = useAppSelector(
@@ -37,6 +38,11 @@ const Products = () => {
   };
 
   useEffect(() => {
+    if (items.length && !isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+
     const debounceTimeout = setTimeout(() => {
       appDispatch(
         loadItems({
@@ -76,7 +82,7 @@ const Products = () => {
         {keyword || categories.length ? (
           <Button
             className="justify-center md:justify-start"
-            style="Danger"
+            theme="Danger"
             onClick={() => {
               setCategories([]);
               setKeyword("");
