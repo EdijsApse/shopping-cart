@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import { ProductReviews } from "../mock-data/index";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect } from "react";
@@ -7,20 +7,19 @@ import { getItem } from "../store/products/thunks";
 import Spinner from "../components/Spinner";
 import AddToCartButton from "../components/AddToCartButton";
 
-const Product = () => {
-  const { isLoadingDetails, product } = useAppSelector(
+const ProductPage = () => {
+  const { isLoadingDetails, product, detailsLoaded } = useAppSelector(
     (state) => state.products,
   );
   const { productId } = useParams();
   const appDispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     appDispatch(getItem(productId));
-  }, [productId]);
+  }, [productId, appDispatch]);
 
-  if (!isLoadingDetails && !product) {
-    return navigate("/404");
+  if (detailsLoaded && !product) {
+    return <Navigate to="/404" replace />;
   }
 
   return (
@@ -84,4 +83,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ProductPage;

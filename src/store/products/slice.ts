@@ -6,6 +6,7 @@ type ProductsState = {
   items: Product[];
   isLoadingItems: boolean;
   isLoadingDetails: boolean;
+  detailsLoaded: boolean;
   itemsError: string;
   reviewError: string;
   product: null | Product;
@@ -19,6 +20,7 @@ const initialState: ProductsState = {
   product: null,
   isLoadingItems: false,
   isLoadingDetails: true,
+  detailsLoaded: false,
   savingReview: false,
   reviewStored: false,
   reviewSubmited: false,
@@ -48,13 +50,16 @@ const productsSlice = createSlice({
     builder.addCase(getItem.pending, (state) => {
       state.isLoadingDetails = true;
       state.product = null;
+      state.detailsLoaded = false;
     });
     builder.addCase(getItem.fulfilled, (state, { payload }) => {
       state.isLoadingDetails = false;
       state.product = payload;
+      state.detailsLoaded = true;
     });
     builder.addCase(getItem.rejected, (state) => {
       state.isLoadingDetails = false;
+      state.detailsLoaded = true;
     });
 
     builder.addCase(reviewProduct.pending, (state) => {
