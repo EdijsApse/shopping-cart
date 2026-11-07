@@ -1,4 +1,4 @@
-import type { CartItem } from "../types/product";
+import type { CartItem } from "../types/cart";
 import { changeQuantity, removeItem } from "../store/cartSlice";
 import { useAppDispatch } from "../store/store";
 import Button from "./Button";
@@ -92,7 +92,7 @@ const CartItemComponent = (cartItem: CartItem) => {
         </p>
         <Button
           className="justify-center w-full md:w-auto md:justify-start"
-          style="Danger"
+          theme="Danger"
           onClick={onRemovehandler}
         >
           <>

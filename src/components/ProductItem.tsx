@@ -1,18 +1,8 @@
 import { Link } from "react-router";
-import { addItem } from "../store/cartSlice";
-import { useAppDispatch } from "../store/store";
 import type { Product } from "../types/product";
-import Button from "./Button";
+import AddToCartButton from "./AddToCartButton";
 
 const ProductItem = (product: Product) => {
-  const appDispatch = useAppDispatch();
-  const onAddHandler = () => {
-    appDispatch(
-      addItem({
-        item: product,
-      }),
-    );
-  };
   return (
     <div className="rounded-xl shadow-lg bg-gray-50">
       <div className="rounded-t-xl overflow-hidden">
@@ -29,20 +19,7 @@ const ProductItem = (product: Product) => {
             {product.name}
           </Link>
         </div>
-        <Button
-          className="w-full py-0! px-0! justify-between"
-          onClick={onAddHandler}
-        >
-          <>
-            <div className="py-3 px-4 flex items-center">
-              <i className="mr-2 fa-solid fa-cart-shopping text-xl"></i>
-              Add to cart
-            </div>
-            <span className="h-full flex items-center bg-cyan-300 rounded-r-lg px-4 font-semibold text-lg">
-              {product.price}$
-            </span>
-          </>
-        </Button>
+        <AddToCartButton product={product} />
       </div>
     </div>
   );
