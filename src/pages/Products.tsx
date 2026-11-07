@@ -38,7 +38,7 @@ const Products = () => {
   };
 
   useEffect(() => {
-    if (items.length && !isMounted.current) {
+    if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
@@ -56,6 +56,17 @@ const Products = () => {
       clearTimeout(debounceTimeout);
     };
   }, [appDispatch, keyword, categories]);
+
+  useEffect(() => {
+    if (!items.length) {
+      appDispatch(
+        loadItems({
+          keyword,
+          categories,
+        }),
+      );
+    }
+  }, []);
 
   return (
     <section className="relative">
