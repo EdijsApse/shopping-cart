@@ -52,11 +52,13 @@ const productsSlice = createSlice({
       if (state.activeLoadItemsRequestId !== meta.requestId) return;
       state.isLoadingItems = false;
       state.items = payload;
+      state.activeLoadItemsRequestId = null;
     });
     builder.addCase(loadItems.rejected, (state, { payload, meta }) => {
       if (state.activeLoadItemsRequestId !== meta.requestId) return;
       state.isLoadingItems = false;
       state.itemsError = payload?.message ?? "Something went wrong";
+      state.activeLoadItemsRequestId = null;
     });
 
     builder.addCase(getItem.pending, (state) => {

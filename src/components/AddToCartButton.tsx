@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { addItem } from "../store/cartSlice";
+import { addItem } from "../store/cart/slice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import type { Product } from "../types/product";
 import Button from "./Button";

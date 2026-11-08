@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Product } from "../types/product";
-import type { CartItem } from "../types/cart";
+import type { Product } from "../../types/product";
+import type { CartItem } from "../../types/cart";
 
 type CartState = {
   items: CartItem[];
@@ -36,7 +36,7 @@ const cartSlice = createSlice({
       const { id, newQuantity } = action.payload;
       const item = state.items.find((item) => item.id === id);
 
-      if (item) {
+      if (item && newQuantity >= 1) {
         item.quantity = newQuantity;
       }
     },

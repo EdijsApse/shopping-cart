@@ -1,5 +1,5 @@
 import type { CartItem } from "../types/cart";
-import { changeQuantity, removeItem } from "../store/cartSlice";
+import { changeQuantity, removeItem } from "../store/cart/slice";
 import { useAppDispatch } from "../store/store";
 import Button from "./Button";
 import ProductLink from "./ProductLink";
