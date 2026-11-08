@@ -13,6 +13,7 @@ type ProductsState = {
   savingReview: boolean;
   reviewStored: boolean;
   reviewSubmited: boolean;
+  activeLoadItemsRequestId: string | null;
 };
 
 const initialState: ProductsState = {
@@ -26,23 +27,34 @@ const initialState: ProductsState = {
   reviewSubmited: false,
   reviewError: "",
   itemsError: "",
+  activeLoadItemsRequestId: null,
 };
 
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    resetReviewFormState: (state) => {
+      state.reviewError = "";
+      state.savingReview = false;
+      state.reviewStored = false;
+      state.reviewSubmited = false;
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(loadItems.pending, (state) => {
+    builder.addCase(loadItems.pending, (state, { meta }) => {
+      state.activeLoadItemsRequestId = meta.requestId;
       state.isLoadingItems = true;
       state.items = [];
       state.itemsError = "";
     });
-    builder.addCase(loadItems.fulfilled, (state, { payload }) => {
+    builder.addCase(loadItems.fulfilled, (state, { payload, meta }) => {
+      if (state.activeLoadItemsRequestId !== meta.requestId) return;
       state.isLoadingItems = false;
       state.items = payload;
     });
-    builder.addCase(loadItems.rejected, (state, { payload }) => {
+    builder.addCase(loadItems.rejected, (state, { payload, meta }) => {
+      if (state.activeLoadItemsRequestId !== meta.requestId) return;
       state.isLoadingItems = false;
       state.itemsError = payload?.message ?? "Something went wrong";
     });
@@ -81,5 +93,7 @@ const productsSlice = createSlice({
     });
   },
 });
+
+export const { resetReviewFormState } = productsSlice.actions;
 
 export default productsSlice.reducer;

@@ -5,6 +5,8 @@ import { reviewSchema } from "../zod-schemas/product-review";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Spinner from "../components/Spinner";
 import { reviewProduct } from "../store/products/thunks";
+import { useEffect } from "react";
+import { resetReviewFormState } from "../store/products/slice";
 
 type ReviewFormProps = {
   productId: string;
@@ -37,6 +39,12 @@ const ReviewForm = ({ productId }: ReviewFormProps) => {
       }),
     );
   });
+
+  useEffect(() => {
+    return () => {
+      appDispatch(resetReviewFormState());
+    };
+  }, []);
 
   return (
     <div className="relative min-h-20">

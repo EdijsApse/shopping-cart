@@ -64,7 +64,6 @@ const CartItemComponent = (cartItem: CartItem) => {
         <div className="flex flex-col gap-4 mt-auto md:flex-row">
           <input
             type="number"
-            min={0}
             value={cartItem.quantity}
             onChange={onInputChange}
             className="w-full py-2 px-4 border border-gray-200 rounded md:w-20"
