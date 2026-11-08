@@ -128,7 +128,7 @@ describe("loadItems thunk", () => {
     const result = await promise;
     const state = store.getState().products;
 
-    expect(getItem.fulfilled.match(result));
+    expect(getItem.fulfilled.match(result)).toBe(true);
     expect(state.detailsLoaded).toBe(true);
     expect(state.product).not.toBeNull();
   });
@@ -142,7 +142,7 @@ describe("loadItems thunk", () => {
     const result = await promise;
     const state = store.getState().products;
 
-    expect(getItem.rejected.match(result));
+    expect(getItem.rejected.match(result)).toBe(true);
     expect(state.product).toBeNull();
     expect(state.detailsLoaded).toBe(true);
   });
@@ -163,14 +163,14 @@ describe("loadItems thunk", () => {
     const result = await promise;
     const state = store.getState().products;
 
-    expect(reviewProduct.fulfilled.match(result));
+    expect(reviewProduct.fulfilled.match(result)).toBe(true);
     expect(state.reviewStored).toBe(true);
     expect(state.reviewError).toBe("");
     expect(state.reviewSubmited).toBe(true);
     expect(state.savingReview).toBe(false);
   });
 
-  it("should not add review when rejected", async () => {
+  it("should not store review when result is false", async () => {
     const store = createTestStore();
     const promise = store.dispatch(
       reviewProduct({
@@ -186,7 +186,7 @@ describe("loadItems thunk", () => {
     const result = await promise;
     const state = store.getState().products;
 
-    expect(reviewProduct.rejected.match(result));
+    expect(reviewProduct.fulfilled.match(result)).toBe(true);
     expect(state.reviewStored).toBe(false);
     expect(state.reviewSubmited).toBe(true);
     expect(state.savingReview).toBe(false);
@@ -208,7 +208,7 @@ describe("loadItems thunk", () => {
     const result = await promise;
     const state = store.getState().products;
 
-    expect(reviewProduct.rejected.match(result));
+    expect(reviewProduct.rejected.match(result)).toBe(true);
     expect(state.reviewStored).toBe(false);
     expect(state.reviewError).toBe("Error saving your review!");
     expect(state.reviewSubmited).toBe(true);
