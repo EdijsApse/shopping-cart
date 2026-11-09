@@ -2,7 +2,7 @@ import { Navigate, useParams } from "react-router";
 import { ProductReviews } from "../mock-data/index";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect } from "react";
-import ReviewForm from "../layout/ReviewForm";
+import ReviewForm from "../components/ReviewForm";
 import { getItem } from "../store/products/thunks";
 import Spinner from "../components/Spinner";
 import AddToCartButton from "../components/AddToCartButton";

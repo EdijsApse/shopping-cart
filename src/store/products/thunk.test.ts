@@ -151,7 +151,7 @@ describe("loadItems thunk", () => {
     const store = createTestStore();
     const promise = store.dispatch(
       reviewProduct({
-        id: 1,
+        id: "1",
         fullname: "Name Surname",
         rating: 2,
         description: "Test description",
@@ -174,7 +174,7 @@ describe("loadItems thunk", () => {
     const store = createTestStore();
     const promise = store.dispatch(
       reviewProduct({
-        id: 1,
+        id: "1",
         fullname: "tests",
         rating: 2,
         description: "Test description",
@@ -196,7 +196,7 @@ describe("loadItems thunk", () => {
     const store = createTestStore();
     const promise = store.dispatch(
       reviewProduct({
-        id: 1,
+        id: "1",
         fullname: "error",
         rating: 2,
         description: "Test description",

@@ -7,7 +7,7 @@ import ProductLink from "./ProductLink";
 const CartItemComponent = (cartItem: CartItem) => {
   const appDispatch = useAppDispatch();
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = +event.target.value;
+    const value = +event.currentTarget.value;
 
     if (value >= 1) {
       appDispatch(
@@ -47,10 +47,7 @@ const CartItemComponent = (cartItem: CartItem) => {
   };
 
   return (
-    <div
-      key={cartItem.id}
-      className="flex flex-col gap-4 border-b border-gray-100 pb-6 lg:flex-row"
-    >
+    <div className="flex flex-col gap-4 border-b border-gray-100 pb-6 lg:flex-row">
       <div className="w-full rounded overflow-hidden lg:max-w-80">
         <img src={cartItem.image} alt={cartItem.name} />
       </div>
@@ -68,17 +65,20 @@ const CartItemComponent = (cartItem: CartItem) => {
             onChange={onInputChange}
             className="w-full py-2 px-4 border border-gray-200 rounded md:w-20"
             aria-label={`Quantity of ${cartItem.name} item`}
+            name={`quantity-${cartItem.id}`}
           />
           <div className="w-full flex flex-col gap-4 md:flex-row md:w-auto">
             <Button
               onClick={onIncreaseHandler}
               className="w-full justify-center md:auto"
+              aria-label="Increase count"
             >
               <i className="fa-solid fa-plus"></i>
             </Button>
 
             <Button
               onClick={onDecreaseHandler}
+              aria-label="Decrease count"
               className="w-full justify-center md:auto"
             >
               <i className="fa-solid fa-minus"></i>

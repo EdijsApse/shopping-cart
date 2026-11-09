@@ -1,9 +1,9 @@
-import Button from "../components/Button";
+import Button from "./Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reviewSchema } from "../zod-schemas/product-review";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import Spinner from "../components/Spinner";
+import Spinner from "./Spinner";
 import { reviewProduct } from "../store/products/thunks";
 import { useEffect } from "react";
 import { resetReviewFormState } from "../store/products/slice";

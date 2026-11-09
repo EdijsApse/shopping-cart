@@ -7,14 +7,14 @@ type DropdownSelectItem = {
 
 type DrodpownSelectProps = {
   items: DropdownSelectItem[];
-  selectedValues: number[];
+  selectedValues?: number[];
   onSelect: (value: number) => void;
 };
 
 const DrodpownSelect = ({
   items,
   onSelect,
-  selectedValues,
+  selectedValues = [],
 }: DrodpownSelectProps) => {
   const [isOpened, setIsOpened] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -57,6 +57,7 @@ const DrodpownSelect = ({
         <button
           className="ml-auto cursor-pointer"
           type="button"
+          aria-label="Change visibility"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation();
             toggleVisibility();
@@ -69,26 +70,25 @@ const DrodpownSelect = ({
       </div>
       <div
         className={`absolute w-full top-[calc(100%+0.25rem)] bg-white shadow rounded transition-all duration-300 ${
-          isOpened
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-2 pointer-events-none"
+          isOpened ? "" : "hidden"
         }`}
       >
         <ul>
           {items.map((item) => (
-            <li
-              key={item.value}
-              className="flex items-center py-2 px-4 border-b border-gray-100 last-of-type:border-b-0 cursor-pointer group"
-              onClick={() => {
-                onSelectValue(item.value);
-              }}
-            >
-              <span className="group-hover:text-cyan-400 transition-all duration-300">
-                {item.display}
-              </span>
-              {selectedValues.includes(item.value) && (
-                <i className="ml-auto text-cyan-500 fa-solid fa-check"></i>
-              )}
+            <li key={item.value}>
+              <button
+                onClick={() => {
+                  onSelectValue(item.value);
+                }}
+                className="w-full flex items-center py-2 px-4 border-b border-gray-100 last-of-type:border-b-0 cursor-pointer group"
+              >
+                <span className="group-hover:text-cyan-400 transition-all duration-300">
+                  {item.display}
+                </span>
+                {selectedValues.includes(item.value) && (
+                  <i className="ml-auto text-cyan-500 fa-solid fa-check"></i>
+                )}
+              </button>
             </li>
           ))}
         </ul>
