@@ -71,9 +71,16 @@ describe("CartItem", () => {
       payload: { item: { ...testCartItem, quantity: 2 } },
     });
 
+    store.dispatch({
+      type: "cart/changeQuantity",
+      payload: { id: 1, newQuantity: 2 },
+    });
+
     const decreaseButton = screen.getByRole("button", {
       name: /decrease count/i,
     });
+
+    expect(store.getState().cart.items[0].quantity).toBe(2);
 
     await user.click(decreaseButton);
 
@@ -86,7 +93,7 @@ describe("CartItem", () => {
 
     store.dispatch({
       type: "cart/addItem",
-      payload: { item: { ...testCartItem, quantity: 2 } },
+      payload: { item: testCartItem },
     });
 
     const removeButton = screen.getByRole("button", {
@@ -103,7 +110,7 @@ describe("CartItem", () => {
 
     store.dispatch({
       type: "cart/addItem",
-      payload: { item: { ...testCartItem, quantity: 2 } },
+      payload: { item: testCartItem },
     });
 
     const total = screen.getByText(/total/i);

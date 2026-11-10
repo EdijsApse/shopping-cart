@@ -20,6 +20,7 @@ const Header = () => {
           </nav>
           <Link
             to={"/checkout"}
+            aria-label="Go to checkout page"
             className="flex items-center py-3 px-4 bg-white rounded-lg text-md cursor-pointer button-hover"
           >
             <i className="mr-2 fa-solid fa-cart-shopping text-xl"></i>
